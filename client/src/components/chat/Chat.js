@@ -9,7 +9,7 @@ import Messages from '../messages/Messages';
 let socket;
 
 export default function Chat({location}) {
-  const PORT = 'localhost:8090';
+  const PORT = ('localhost:8090');
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
   const [message, setMessage] = useState("");
@@ -18,9 +18,9 @@ export default function Chat({location}) {
   useEffect (()=>{
     const {name, room } = queryString.parse(location.search);
     socket = io(PORT);
-
     setName(name);
     setRoom(room);
+
     socket.emit('join', {name, room}, () => {
 
     })
@@ -46,17 +46,13 @@ export default function Chat({location}) {
       }
   }
   console.log(messages);
-
     return (
       <div>
         <div>
-        <Infobar room={room} />
-        <Messages messages={messages} name={name}/>
-        <InputMessage message={message} setMessage={setMessage} sendMessage={sendMessage} />
-
-
+          <Infobar room={room} />
+          <Messages messages={messages} name={name}/>
+          <InputMessage message={message} setMessage={setMessage} sendMessage={sendMessage} />
         </div>
       </div>
     );
-
 }

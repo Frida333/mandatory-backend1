@@ -6,9 +6,9 @@ export default function Message({message:{user, text}, name}){
   let currentUser = false;
 
   const userName = name.trim();
-  if(user === userName){
-    currentUser = true;
-  }
+    if(user === userName){
+      currentUser = true;
+    }
 
   return(
     (currentUser)
@@ -23,5 +23,4 @@ export default function Message({message:{user, text}, name}){
      </div>
    )
   )
-
 }

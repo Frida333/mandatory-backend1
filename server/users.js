@@ -20,11 +20,4 @@ const addUser = ({id, name , room}) => {
  const getUser =(id) =>  users.find((user) =>  user.id === id);
 
 
-
-function getUserInRoom(room){
-  users.filter((user) => {
-    user.room === room
-  });
-}
-
-module.exports = {addUser, getUser, getUserInRoom};
+module.exports = {addUser, getUser};

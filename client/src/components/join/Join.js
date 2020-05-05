@@ -8,16 +8,10 @@ export default function Join() {
   const [room, setRoom] = useState("");
 
 
-
-
-
-
-
-    return (
-      <div >
-        <h1>Join</h1>
-        <form>
-
+  return (
+  <div >
+    <h1>Join</h1>
+      <form>
         <div>
           <input
             placeholder="skriv ditt namn"
@@ -29,7 +23,7 @@ export default function Join() {
         </div>
         <div>
           <input
-            placeholder="välj ett rum"
+            placeholder="skapa ett rum"
             label="rum"
             type="text"
             required
@@ -39,8 +33,7 @@ export default function Join() {
         <Link to={`/chat?name=${name}&room=${room}`}>
          <button type="submit">Börja chatta </button>
         </Link>
-       </form>
-      </div>
-    );
-
+     </form>
+  </div>
+  );
 }
