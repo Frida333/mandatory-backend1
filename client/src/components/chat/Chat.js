@@ -5,6 +5,7 @@ import queryString from 'query-string';
 import Infobar from '../infobar/Infobar';
 import InputMessage from '../input/InputMessage';
 import Messages from '../messages/Messages';
+import Join from '../join/Join';
 
 let socket;
 
@@ -14,6 +15,8 @@ export default function Chat({location}) {
   const [room, setRoom] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+   const [users, setUsers] = useState('');
+
 
   useEffect (()=>{
     const {name, room } = queryString.parse(location.search);
@@ -29,15 +32,39 @@ export default function Chat({location}) {
       socket.emit('disconnect');
       socket.off();
     }
-  },[ PORT, location.search]);
+  },[PORT, location.search]);
+
+
 
   useEffect (() => {
-    socket.on('message', (message) => {
-      setMessages([...messages, message]);
-    })
-  }, [messages]);
+    const {name, room } = queryString.parse(location.search);
+    setName(name);
+    setRoom(room);
 
-  function sendMessage(e) {
+    socket.on('savedMessages', (res) => {
+
+      setMessages(messages => [...messages, ...res.res.map(savedMessages => savedMessages.messages)]);
+
+
+
+    })
+  }, [location.search]);
+
+
+
+
+
+  useEffect(( ) => {
+      socket.on("message", message => {
+      setMessages(messages => [...messages, message]);
+    });
+
+     socket.on("roomData", ({ users }) => {
+       setUsers(users);
+     });
+},  [ ]);
+
+function sendMessage(e) {
     e.preventDefault();
 
     if(message){
@@ -45,6 +72,7 @@ export default function Chat({location}) {
         setMessage(''));
       }
   }
+
   console.log(messages);
     return (
       <div>
@@ -52,6 +80,10 @@ export default function Chat({location}) {
           <Infobar room={room} />
           <Messages messages={messages} name={name}/>
           <InputMessage message={message} setMessage={setMessage} sendMessage={sendMessage} />
+
+        </div>
+        <div>
+
         </div>
       </div>
     );
