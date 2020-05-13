@@ -23,10 +23,9 @@ export default function Join() {
     })
   },[])
 
-  function onClickDelete(e, id){
+  function onClickDelete(e, id, room){
     e.preventDefault();
-    axios.delete(`/chat/${id}`, {
-      room: room,
+    axios.delete(`/chat/${id}/${room}`, {
     })
       .then((res)=>{
     })
@@ -57,7 +56,7 @@ export default function Join() {
                     <Link onSubmit={e => (!name || !room) ? e.preventDefault() : null} to={`/chat?name=${name}&room=${j.room}`}>
                       <button type='submit'>Börja chatta</button>
                     </Link>
-                    <button onClick={(e) => onClickDelete(e, j._id) }>Delete</button>
+                    <button onClick={(e) => onClickDelete(e, j._id, j.room) }>Delete</button>
                   </div>
                 )
               })

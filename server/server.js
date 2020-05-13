@@ -51,12 +51,12 @@ app.get('/chat', (req, res) => {
 })
 
 
-app.delete('/chat/:id', (req,res) =>{
+app.delete('/chat/:id/:room', (req,res) =>{
   let roomId = req.params.id;
-  console.log(roomId);
+  let name = req.params.room;
   const db=getDB();
   db.collection('savedrooms')
-    .remove({_id: createObjectId(roomId)})
+    .deleteMany({_id: createObjectId(roomId)})
     .then(room => {
       console.log('savedrooms delete')
       res.status(200).send();
@@ -66,7 +66,7 @@ app.delete('/chat/:id', (req,res) =>{
       res.status(500).end();
     });
     db.collection('chat')
-    .remove({_id: createObjectId(roomId)})
+    .deleteMany({room: name})
     .then(room => {
       console.log('chat deleted')
       res.status(200).send();
@@ -76,7 +76,6 @@ app.delete('/chat/:id', (req,res) =>{
       res.status(500).end();
     });
 })
-
 
 
 io.on('connection' , (socket) => {
