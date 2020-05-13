@@ -1,5 +1,5 @@
 import React from 'react';
-
+import ReactEmoji from 'react-emoji';
 import './message.css';
 
 export default function Message({message:{user, text}, name}){
@@ -14,12 +14,12 @@ export default function Message({message:{user, text}, name}){
     (currentUser)
     ? (
       <div>
-        <p>{userName}  {text}</p>
+        <p>{userName}  {ReactEmoji.emojify(text)}</p>
       </div>
     )
    : (
      <div>
-       <p>{user}  {text}</p>
+       <p>{user}  {ReactEmoji.emojify(text)}</p>
      </div>
    )
   )

@@ -2,12 +2,16 @@ import React, {useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import io from 'socket.io-client';
 import axios from 'axios';
+import CreateRoom from './CreateRoom';
 
 
 export default function Join() {
-  const [name, setName] = useState("");
-  const [room, setRoom] = useState("");
+  const [createRoom, setCreateRoom] = useState(false);
+  const [name, setName] = useState('');
+  const [room, setRoom] = useState('');
   const [savedRooms, setSavedRooms] = useState([]);
+  const [id, setId] = useState();
+
 
   useEffect(() => {
     axios.get('/chat')
@@ -19,36 +23,50 @@ export default function Join() {
     })
   },[])
 
-  return (
+  function onClickDelete(e, id){
+    e.preventDefault();
+    axios.delete(`/chat/${id}`, {
+      room: room,
+    })
+      .then((res)=>{
+    })
+      .catch((err) => {
+    });
+  }
+
+  function createNewRoom(){
+    setCreateRoom(true);
+    setRoom('');
+  }
+
+  return(
   <div >
-    <h1>Join</h1>
-      <form>
+    <h1>Välkommen till chatten</h1>
+    <div>
+    <form>
+      <label> Namn:
+        <input type='text' required placeholder='Namn' onChange={(e) => setName(e.target.value)}></input>
+      </label>
         <div>
-          <input
-            placeholder="skriv ditt namn"
-            label="Användare namn"
-            type="text"
-            required
-            onChange={(e)=> setName(e.target.value) }
-          />
-        </div>
-        <div>
-          <input
-            placeholder="skapa ett rum"
-            label="rum"
-            type="text"
-            required
-            onChange={(e) => setRoom(e.target.value) }
-          />
-        </div>
-
-        <Link to={`/chat?name=${name}&room=${room}`}>
-      <button type="submit">Börja chatta </button>
-
-        </Link>
-
-
-     </form>
+          {savedRooms.map((room,i) => {
+            return(
+              room.map((j, index) => {
+                return(
+                  <div key={j._id} >
+                    {j.room}
+                    <Link onSubmit={e => (!name || !room) ? e.preventDefault() : null} to={`/chat?name=${name}&room=${j.room}`}>
+                      <button type='submit'>Börja chatta</button>
+                    </Link>
+                    <button onClick={(e) => onClickDelete(e, j._id) }>Delete</button>
+                  </div>
+                )
+              })
+          )})}
+          </div>
+        </form>
+        <button  onClick={createNewRoom}>Skapa ett nytt rum</button>
   </div>
-  );
+    {createRoom && <CreateRoom room={room} setRoom={setRoom} name={name} setName={setName} /> }
+  </div>
+);
 }
